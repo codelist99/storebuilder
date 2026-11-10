@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./styles.css";
 
 export const metadata: Metadata = {
-  title: "Free Store Builder",
+  title: "BuildMyStore",
   description: "Launch a ready-to-customize Shopify store."
 };
 

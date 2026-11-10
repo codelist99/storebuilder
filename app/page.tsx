@@ -3,7 +3,7 @@ import { FunnelShell } from "@/components/FunnelShell";
 
 export default function Home() {
   return (
-    <FunnelShell step="Free ecommerce store build">
+    <FunnelShell step="BuildMyStore ecommerce setup">
       <h1>We’ll build your Shopify store for you</h1>
       <p>Open your Shopify account, securely connect your store, and let our builder install the storefront foundation for you.</p>
       <ul>

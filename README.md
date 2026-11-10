@@ -1,4 +1,4 @@
-# StoreBuilder
+# BuildMyStore
 
 Independent Shopify store-builder funnel and app foundation. This repository is isolated from the existing offer projects.
 
