@@ -11,9 +11,9 @@ const statements = fs
   .map((statement) => statement.trim())
   .filter(Boolean);
 
-for (const statement of statements) await sql.query(statement);
+for (const statement of statements) await sql(statement);
 
-const tables = await sql.query(
+const tables = await sql(
   "select table_name from information_schema.tables where table_schema = 'public' order by table_name"
 );
 
