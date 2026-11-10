@@ -3,9 +3,9 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-const LOGO = "https://statics.myclickfunnels.com/workspace/jPlqnj/image/17474848/file/ba1ffca5e76158a5729df74f9c15ec83.png";
-const STORES = "https://statics.myclickfunnels.com/workspace/jPlqnj/image/17474858/file/f87c61ef6120840d6a5b61ac0c558be3.png";
-const ADRIAN = "https://statics.myclickfunnels.com/workspace/jPlqnj/image/17474852/file/2523945468e5d1344cd85ca7208ff6cb.jpg";
+const LOGO = "/landing/store-build-logo.png";
+const STORES = "/landing/store-examples.png";
+const ADRIAN = "/landing/adrian-morrison.jpg";
 const WEBINAR = "https://watch.webby.app/goto/be8ea2f1-30ad-4e16-aea6-84de1cc3cecc";
 
 function useCountdown() {
