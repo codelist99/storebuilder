@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 const LOGO = "/landing/store-build-logo.png";
 const STORES = "/landing/store-examples.png";
 const ADRIAN = "/landing/adrian-morrison.jpg";
-const WEBINAR = "https://watch.webby.app/goto/be8ea2f1-30ad-4e16-aea6-84de1cc3cecc";
 
 function useCountdown() {
   const [remaining, setRemaining] = useState(69);
@@ -32,7 +31,7 @@ export function LiveStoreLanding() {
     try {
       await fetch("/api/leads", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
     } finally {
-      const destination = new URL(WEBINAR);
+      const destination = new URL("/webinar", window.location.origin);
       for (const [key, value] of Object.entries(attribution)) destination.searchParams.set(key, value);
       window.location.assign(destination.toString());
     }
