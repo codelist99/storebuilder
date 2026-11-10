@@ -2,7 +2,11 @@ import Link from "next/link";
 import { FunnelShell } from "@/components/FunnelShell";
 import { OfferVideo } from "@/components/OfferVideo";
 
-export default function UpgradePage() {
+export default async function UpgradePage({ searchParams }: { searchParams: Promise<{ shop?: string }> }) {
+  const { shop = "" } = await searchParams;
+  const checkoutUrl = process.env.PREMIUM_CHECKOUT_URL
+    ? `${process.env.PREMIUM_CHECKOUT_URL}${process.env.PREMIUM_CHECKOUT_URL.includes("?") ? "&" : "?"}shop=${encodeURIComponent(shop)}`
+    : `/upgrade?shop=${encodeURIComponent(shop)}&checkout=pending`;
   return (
     <FunnelShell>
       <h1>💰 Get faster results with a Premium Store</h1>
@@ -13,8 +17,8 @@ export default function UpgradePage() {
         <div><h2>Beginner Store</h2><ul><li>Free Shopify theme</li><li>Basic banners</li><li>Starter product selection</li></ul></div>
       </div>
       <div className="offer-price">$97</div>
-      <a className="btn" href={process.env.PREMIUM_CHECKOUT_URL || "/upgrade?checkout=pending"}>Yes — upgrade my store</a>
-      <Link className="btn secondary" href="/downsell">No thanks — continue with the basic store</Link>
+      <a className="btn" href={checkoutUrl}>Yes — upgrade my store</a>
+      <Link className="btn secondary" href={`/downsell?shop=${encodeURIComponent(shop)}`}>No thanks — continue with the basic store</Link>
     </FunnelShell>
   );
 }

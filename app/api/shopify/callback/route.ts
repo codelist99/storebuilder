@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { encryptSecret } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { normalizeShop, verifyShopifyHmac } from "@/lib/shopify";
+import { adminGraphql } from "@/lib/shopify-admin";
 
 export async function GET(request: NextRequest) {
   const shop = normalizeShop(request.nextUrl.searchParams.get("shop"));
@@ -34,6 +35,26 @@ export async function GET(request: NextRequest) {
       connected_at = now(),
       updated_at = now()
   `;
+
+  const appUrl = process.env.APP_URL?.replace(/\/$/, "");
+  if (appUrl) {
+    try {
+      await adminGraphql<{
+        webhookSubscriptionCreate: { userErrors: Array<{ message: string }> }
+      }>({ domain: shop, accessToken: token.access_token }, `
+        mutation RegisterUninstallWebhook($topic: WebhookSubscriptionTopic!, $subscription: WebhookSubscriptionInput!) {
+          webhookSubscriptionCreate(topic: $topic, webhookSubscription: $subscription) {
+            userErrors { message }
+          }
+        }
+      `, {
+        topic: "APP_UNINSTALLED",
+        subscription: { uri: `${appUrl}/api/webhooks/app-uninstalled`, format: "JSON" }
+      });
+    } catch (error) {
+      console.error("Unable to register Shopify uninstall webhook", error);
+    }
+  }
 
   const response = NextResponse.redirect(new URL(`/upgrade?shop=${encodeURIComponent(shop)}`, request.url));
   response.cookies.delete("shopify_oauth_state");

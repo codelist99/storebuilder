@@ -19,3 +19,12 @@ export function verifyShopifyHmac(url: URL) {
   const expectedBuffer = Buffer.from(expected, "hex");
   return actualBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(actualBuffer, expectedBuffer);
 }
+
+export function verifyShopifyWebhook(rawBody: string, suppliedHmac: string | null) {
+  const secret = process.env.SHOPIFY_API_SECRET;
+  if (!secret || !suppliedHmac) return false;
+  const expected = crypto.createHmac("sha256", secret).update(rawBody, "utf8").digest("base64");
+  const expectedBuffer = Buffer.from(expected);
+  const suppliedBuffer = Buffer.from(suppliedHmac);
+  return expectedBuffer.length === suppliedBuffer.length && crypto.timingSafeEqual(expectedBuffer, suppliedBuffer);
+}

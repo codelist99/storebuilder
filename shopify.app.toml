@@ -1,0 +1,18 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "13e7fffb81a9151375ac0ab3cbeb7952"
+application_url = "https://www.buildmystore.dev"
+embedded = false
+name = "Buildmystore"
+
+[webhooks]
+api_version = "2026-10"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products,write_products,read_themes,write_themes,read_content,write_content,read_files,write_files,read_publications,write_publications"
+optional_scopes = [ ]
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [ "https://www.buildmystore.dev/api/shopify/callback" ]
