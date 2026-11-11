@@ -9,6 +9,8 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
   const stateCookie = request.cookies.get("shopify_oauth_state")?.value;
+  const leadCookie = request.cookies.get("shopify_lead_id")?.value || "";
+  const leadId = /^[0-9a-f-]{36}$/i.test(leadCookie) ? leadCookie : null;
   if (!shop || !code || !state || state !== stateCookie || !verifyShopifyHmac(request.nextUrl)) {
     return NextResponse.json({ error: "Invalid Shopify authorization response" }, { status: 400 });
   }
@@ -26,9 +28,10 @@ export async function GET(request: NextRequest) {
   const token = await tokenResponse.json() as { access_token: string; scope: string };
   const sql = db();
   await sql`
-    insert into shops (shop_domain, access_token_encrypted, scopes, connection_status, connected_at, updated_at)
-    values (${shop}, ${encryptSecret(token.access_token)}, ${token.scope}, 'connected', now(), now())
+    insert into shops (lead_id, shop_domain, access_token_encrypted, scopes, connection_status, connected_at, updated_at)
+    values (${leadId}, ${shop}, ${encryptSecret(token.access_token)}, ${token.scope}, 'connected', now(), now())
     on conflict (shop_domain) do update set
+      lead_id = coalesce(excluded.lead_id, shops.lead_id),
       access_token_encrypted = excluded.access_token_encrypted,
       scopes = excluded.scopes,
       connection_status = 'connected',
@@ -58,5 +61,6 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(new URL(`/upgrade?shop=${encodeURIComponent(shop)}`, request.url));
   response.cookies.delete("shopify_oauth_state");
+  response.cookies.delete("shopify_lead_id");
   return response;
 }

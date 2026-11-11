@@ -13,10 +13,11 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   const publicKey = process.env.NMI_PUBLIC_KEY || "";
   if (!offer) return <main className="checkout-page"><section className="checkout-card"><h1>Checkout unavailable</h1><p>This offer link is invalid.</p></section></main>;
   if (!publicKey) return <main className="checkout-page"><section className="checkout-card"><h1>Secure checkout is being configured</h1><p>Please contact support@kairostechnologylabs.com.</p></section></main>;
+  const hasBump = offerKey === "premium_47";
   return <main className="checkout-page"><section className="checkout-card">
     <img src="/landing/store-build-logo.png" alt="BuildMyStore" />
     <h1>Complete your order</h1>
     <div className="checkout-summary"><strong>{offer.name}</strong><b>${offer.amount}</b></div>
-    <NmiCheckout publicKey={publicKey} offer={offerKey} amount={offer.amount} shop={typeof params.shop === "string" ? params.shop : ""} leadId={typeof params.lead === "string" ? params.lead : ""} />
+    <NmiCheckout publicKey={publicKey} offer={offerKey} amount={offer.amount} shop={typeof params.shop === "string" ? params.shop : ""} leadId={typeof params.lead === "string" ? params.lead : ""} showProductBump={hasBump} />
   </section></main>;
 }

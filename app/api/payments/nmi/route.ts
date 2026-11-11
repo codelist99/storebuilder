@@ -25,14 +25,18 @@ export async function POST(request: Request) {
 
   const shop = normalizeShop(value(body, "shop"));
   const leadId = value(body, "leadId");
+  const productBump = offerKey === "premium_47" && body.productBump === true;
+  const amount = productBump ? "64.00" : offer.amount;
+  const cents = productBump ? 6400 : offer.cents;
+  const productCode = productBump ? `${offerKey}+product_sniper_17` : offerKey;
   const orderId = `BMS-${Date.now()}-${crypto.randomBytes(3).toString("hex")}`;
   let result;
   try {
     result = await chargeNmiToken({
       paymentToken,
-      amount: offer.amount,
+      amount,
       orderId,
-      description: offer.name,
+      description: productBump ? `${offer.name} + Product Sniper Software` : offer.name,
       customer: {
         firstName: value(body, "firstName"), lastName: value(body, "lastName"), email,
         phone: value(body, "phone"), address: value(body, "address"), city: value(body, "city"),
@@ -60,9 +64,9 @@ export async function POST(request: Request) {
     resolvedLeadId = leadRows[0]?.id || null;
     const resolvedShopId = shopRows[0]?.id || null;
     await sql`insert into orders (lead_id, shop_id, processor, processor_transaction_id, product_code, amount_cents, status)
-      values (${resolvedLeadId}, ${resolvedShopId}, 'nmi', ${result.transactionId}, ${offerKey}, ${offer.cents}, 'paid')`;
+      values (${resolvedLeadId}, ${resolvedShopId}, 'nmi', ${result.transactionId}, ${productCode}, ${cents}, 'paid')`;
     await sql`insert into funnel_events (lead_id, shop_id, event_name, properties)
-      values (${resolvedLeadId}, ${resolvedShopId}, 'payment_approved', ${JSON.stringify({ offer: offerKey, amount: offer.amount, transactionId: result.transactionId })}::jsonb)`;
+      values (${resolvedLeadId}, ${resolvedShopId}, 'payment_approved', ${JSON.stringify({ offer: offerKey, amount, productBump, transactionId: result.transactionId })}::jsonb)`;
     if (shop && offer.plan) await sql`update shops set selected_plan = ${offer.plan}, updated_at = now() where shop_domain = ${shop}`;
   } catch (cause) {
     // The gateway already approved the charge. Never invite a duplicate retry

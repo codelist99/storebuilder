@@ -18,19 +18,22 @@ type Props = {
   amount: string;
   shop?: string;
   leadId?: string;
+  showProductBump?: boolean;
 };
 
-export function NmiCheckout({ publicKey, offer, amount, shop = "", leadId = "" }: Props) {
+export function NmiCheckout({ publicKey, offer, amount, shop = "", leadId = "", showProductBump = false }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [ready, setReady] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [productBump, setProductBump] = useState(false);
+  const total = (Number(amount) + (productBump ? 17 : 0)).toFixed(2);
 
   function configure() {
     if (!window.CollectJS) return;
     window.CollectJS.configure({
       variant: "inline",
-      price: amount,
+      price: total,
       currency: "USD",
       country: "US",
       fields: {
@@ -56,7 +59,7 @@ export function NmiCheckout({ publicKey, offer, amount, shop = "", leadId = "" }
           const request = await fetch("/api/payments/nmi", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ ...values, paymentToken: response.token, offer, shop, leadId }),
+            body: JSON.stringify({ ...values, paymentToken: response.token, offer, shop, leadId, productBump }),
           });
           const result = await request.json();
           if (!request.ok || !result.ok) throw new Error(result.error || "Payment was not approved.");
@@ -69,7 +72,7 @@ export function NmiCheckout({ publicKey, offer, amount, shop = "", leadId = "" }
     });
   }
 
-  useEffect(() => { configure(); }, []);
+  useEffect(() => { configure(); }, [total]);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -94,8 +97,9 @@ export function NmiCheckout({ publicKey, offer, amount, shop = "", leadId = "" }
       <div className="nmi-row"><label>City<input name="city" autoComplete="address-level2" required /></label><label>State<input name="state" autoComplete="address-level1" required /></label></div>
       <div className="nmi-row"><label>ZIP code<input name="zip" autoComplete="postal-code" required /></label><label>Country<select name="country" defaultValue="US"><option value="US">United States</option><option value="CA">Canada</option></select></label></div>
       <div className="nmi-card-fields"><label>Card number<div id="ccnumber" /></label><div className="nmi-row"><label>Expiration<div id="ccexp" /></label><label>Security code<div id="cvv" /></label></div></div>
+      {showProductBump && <label className="checkout-bump"><input type="checkbox" checked={productBump} onChange={(event) => setProductBump(event.target.checked)} /><span><strong>Yes, add Product Sniper Software for $17</strong><small>Include the optional product-research tool with this order.</small></span></label>}
       {error && <p className="nmi-error" role="alert">{error}</p>}
-      <button className="enroll-checkout" type="submit" disabled={!ready || submitting}>{submitting ? "Processing securely…" : `Pay $${amount} securely`}</button>
+      <button className="enroll-checkout" type="submit" disabled={!ready || submitting}>{submitting ? "Processing securely…" : `Pay $${total} securely`}</button>
       <p className="nmi-secure">🔒 Secure encrypted checkout · Your card details never touch our servers.</p>
     </form>
   </>;
