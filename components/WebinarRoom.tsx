@@ -26,6 +26,7 @@ export function WebinarRoom() {
   const [draft, setDraft] = useState("");
   const [questions, setQuestions] = useState<string[]>([]);
   const [comments, setComments] = useState<string[]>([]);
+  const enrollUrl = `/enroll?${query.toString()}`;
 
   const hostMessages: Message[] = useMemo(() => [
     { at: 25, author: "Adrian Morrison", time: "LIVE", body: <>Welcome! Today we&apos;re building your new ecommerce store together LIVE.</> },
@@ -34,13 +35,18 @@ export function WebinarRoom() {
     { at: 1560, author: "Adrian Morrison", time: "26:15", body: <>Yes—this is how we make our money. If you don&apos;t open an account with our link, then we don&apos;t get paid. We build your store, load it with products and fully take care of everything because Shopify pays us a commission.</> },
     { at: 1575, author: "Adrian Morrison", time: "26:30", body: <>Get Shopify Trial Now at <a href={SHOPIFY} target="_blank" rel="noreferrer" onClick={trackShopify}>our official BuildMyStore link</a></> },
     { at: 1590, author: "Adrian Morrison", time: "26:45", announcement: true, body: <>IMPORTANT: Open your Shopify account with the BuildMyStore link, then return here and continue the training.</> },
-    { at: 1620, author: "Adrian Morrison", time: "27:15", body: <>Once your Shopify account is open, keep this webinar tab available—we&apos;ll walk you through connecting it to the AI Store Builder.</> }
+    { at: 1620, author: "Adrian Morrison", time: "27:15", body: <>Once your Shopify account is open, keep this webinar tab available—we&apos;ll walk you through connecting it to the AI Store Builder.</> },
+    { at: 5400, author: "Adrian Morrison", time: "1:30:00", announcement: true, body: <>The Premium DFY Store enrollment is now open. <a href={enrollUrl} target="_blank" rel="noreferrer" onClick={trackEnroll}>Enroll now and have our team set up the store, theme, products and payments with you.</a></> },
+    { at: 5460, author: "Adrian Morrison", time: "1:31:00", body: <>Premium DFY Store includes all bonuses, the upgraded store package and done-for-you setup. <a href={enrollUrl} target="_blank" rel="noreferrer" onClick={trackEnroll}>View enrollment details here.</a></> }
   ], []);
   const visibleMessages = hostMessages.filter((message) => elapsed >= message.at);
   const viewers = Math.max(286, Math.min(532, 340 + Math.floor(elapsed / 14) + Math.round(18 * Math.sin(elapsed / 31))));
 
   function trackShopify() {
     navigator.sendBeacon?.("/api/events", JSON.stringify({ event: "shopify_affiliate_clicked", seconds: elapsed, source: Object.fromEntries(query.entries()) }));
+  }
+  function trackEnroll() {
+    navigator.sendBeacon?.("/api/events", JSON.stringify({ event: "premium_dfy_enroll_clicked", seconds: elapsed, source: Object.fromEntries(query.entries()) }));
   }
   function submitMessage(event: FormEvent) {
     event.preventDefault();
@@ -64,6 +70,7 @@ export function WebinarRoom() {
           {tab === "qa" && <div className="qa-panel"><h3>Questions &amp; Answers</h3><p>Ask Adrian and Anthony a question about building your Shopify store.</p>{questions.map((question, index) => <div className="question" key={index}><strong>You asked:</strong> {question}</div>)}</div>}
           {tab === "people" && <div className="people-panel"><div className="people-switch"><b>Hosts</b><span>Attendees</span></div><article><img src="/landing/adrian-morrison.jpg" alt="Adrian Morrison" /><strong>Adrian Morrison</strong></article><article><div className="guest-avatar">AM</div><strong>Anthony Morrison</strong></article></div>}
           {tab !== "people" && <form className="webinar-compose" onSubmit={submitMessage}><input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder={tab === "qa" ? "Ask a question" : "Send a message"} /><button>➤</button></form>}
+          {elapsed >= 5400 && <section className="webinar-offer"><h3>Premium DFY Store</h3><p>All Bonuses, Upgraded Store &amp; DFY Setup Included</p><a href={enrollUrl} target="_blank" rel="noreferrer" onClick={trackEnroll}>Enroll now</a></section>}
         </aside>
       </div>
     </main>
