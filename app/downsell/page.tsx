@@ -4,9 +4,7 @@ import { OfferVideo } from "@/components/OfferVideo";
 
 export default async function DownsellPage({ searchParams }: { searchParams: Promise<{ shop?: string }> }) {
   const { shop = "" } = await searchParams;
-  const checkoutUrl = process.env.PREMIUM_DOWNSELL_CHECKOUT_URL
-    ? `${process.env.PREMIUM_DOWNSELL_CHECKOUT_URL}${process.env.PREMIUM_DOWNSELL_CHECKOUT_URL.includes("?") ? "&" : "?"}shop=${encodeURIComponent(shop)}`
-    : `/downsell?shop=${encodeURIComponent(shop)}&checkout=pending`;
+  const checkoutUrl = `/checkout?offer=premium_47&shop=${encodeURIComponent(shop)}`;
   return (
     <FunnelShell>
       <h1>Wait — get the Premium Store for less</h1>

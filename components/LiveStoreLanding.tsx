@@ -40,10 +40,12 @@ export function LiveStoreLanding() {
     setSubmitting(true);
     const values = new FormData(event.currentTarget);
     const payload = { fullName: String(values.get("fullName") || "").trim(), email: String(values.get("email") || "").trim(), phone: String(values.get("phone") || "").trim(), attribution };
-    try { await fetch("/api/leads", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) }); }
+    let leadId = "";
+    try { const response = await fetch("/api/leads", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) }); const result = await response.json(); leadId = String(result.leadId || ""); }
     finally {
       const destination = new URL("/webinar", window.location.origin);
       for (const [key, value] of Object.entries(attribution)) destination.searchParams.set(key, value);
+      if (leadId) destination.searchParams.set("lead", leadId);
       window.location.assign(destination.toString());
     }
   }

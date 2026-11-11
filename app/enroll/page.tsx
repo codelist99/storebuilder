@@ -12,12 +12,12 @@ const inclusions = [
 
 export default async function EnrollPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;
-  const checkout = process.env.DFY_CHECKOUT_URL;
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (typeof value === "string") query.set(key, value);
   }
-  const checkoutUrl = checkout ? `${checkout}${checkout.includes("?") ? "&" : "?"}${query.toString()}` : "";
+  query.set("offer", "dfy_997");
+  const checkoutUrl = `/checkout?${query.toString()}`;
 
   return <main className="enroll-page">
     <section className="enroll-card">
@@ -26,7 +26,7 @@ export default async function EnrollPage({ searchParams }: { searchParams: Promi
         <h1>Complete Your Premium DFY Store Enrollment</h1>
         <div className="enroll-summary"><strong>Premium DFY Store</strong><span>$997.00</span></div>
         <p>Your secure payment is processed by our checkout provider. Your order includes the complete Premium DFY Store package shown here.</p>
-        {checkoutUrl ? <a className="enroll-checkout" href={checkoutUrl}>Continue to secure checkout</a> : <button className="enroll-checkout" disabled>Secure checkout connection pending</button>}
+        <a className="enroll-checkout" href={checkoutUrl}>Continue to secure checkout</a>
         <ul className="enroll-trust"><li>Your order is processed securely.</li><li>Your information is handled according to our Privacy Policy.</li><li>Questions? Email support@kairostechnologylabs.com.</li></ul>
       </div>
       <div className="enroll-offer-panel">

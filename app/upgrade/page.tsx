@@ -4,9 +4,7 @@ import { OfferVideo } from "@/components/OfferVideo";
 
 export default async function UpgradePage({ searchParams }: { searchParams: Promise<{ shop?: string }> }) {
   const { shop = "" } = await searchParams;
-  const checkoutUrl = process.env.PREMIUM_CHECKOUT_URL
-    ? `${process.env.PREMIUM_CHECKOUT_URL}${process.env.PREMIUM_CHECKOUT_URL.includes("?") ? "&" : "?"}shop=${encodeURIComponent(shop)}`
-    : `/upgrade?shop=${encodeURIComponent(shop)}&checkout=pending`;
+  const checkoutUrl = `/checkout?offer=premium_97&shop=${encodeURIComponent(shop)}`;
   return (
     <FunnelShell>
       <h1>💰 Get faster results with a Premium Store</h1>
