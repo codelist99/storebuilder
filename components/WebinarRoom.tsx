@@ -4,7 +4,7 @@ import { FormEvent, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const VIDEO = "https://player.vimeo.com/progressive_redirect/playback/1149918693/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&signature=f86d1727b02d17f3d5a1dcf1a2d881226ed5064a5a39d9971934dfe9693e34bf";
-const SHOPIFY = "https://www.shopify.com/commerce-coach/adrianmorrison?irclickid=Rv3W4IVAFxyZUay1A42jOzL0UkryvY29rziW3s0&irgwc=1&partner=3219387&affpt=excluded&utm_channel=affiliates&utm_source=3219387-impact&utm_medium=cpa&iradid=1061744";
+const SHOPIFY = "/go/shopify";
 
 type Tab = "chat" | "qa" | "people";
 type Message = { at: number; author: string; time: string; body: React.ReactNode; announcement?: boolean };
