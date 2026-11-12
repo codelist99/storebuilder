@@ -1,3 +1,7 @@
-import {redirect} from "next/navigation";import {FunnelShell} from "@/components/FunnelShell";
-async function connect(formData:FormData){"use server";const raw=String(formData.get("shop")||"").trim().toLowerCase();const shop=raw.replace(/^https?:\/\//,"").replace(/\/.*$/,"");if(!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop))redirect("/connect?error=invalid");const lead=String(formData.get("lead")||"");const q=new URLSearchParams({shop});if(/^[0-9a-f-]{36}$/i.test(lead))q.set("lead",lead);redirect(`/install?${q}`)}
-export default async function Page({searchParams}:{searchParams:Promise<{error?:string;lead?:string}>}){const{error,lead=""}=await searchParams;return <FunnelShell><h1 className="compact-title">✅ Connect your Shopify Store</h1><p>Enter the permanent URL shown in Shopify. It looks like <mark>yourstorename.myshopify.com</mark>.</p><ol><li>Open Shopify Settings.</li><li>Copy the <strong>.myshopify.com</strong> address.</li><li>Return here, paste it below, and save.</li></ol>{error&&<p className="notice">Please enter a valid .myshopify.com address.</p>}<form action={connect} className="form-grid"><input type="hidden" name="lead" value={lead}/><label className="field wide">URL<input name="shop" placeholder="your-store.myshopify.com" required/></label><button className="btn wide" type="submit">Save</button></form></FunnelShell>}
+import { ConnectShopifyStore } from "@/components/ConnectShopifyStore";
+import { FunnelShell } from "@/components/FunnelShell";
+
+export default async function ConnectPage({ searchParams }: { searchParams: Promise<{ lead?: string; shop?: string }> }) {
+  const { lead = "", shop = "" } = await searchParams;
+  return <FunnelShell step="STEP 1 · Create Your Shopify Store"><ConnectShopifyStore lead={lead} initialShop={shop} /></FunnelShell>;
+}
