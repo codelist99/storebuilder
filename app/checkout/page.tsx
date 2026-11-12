@@ -1,7 +1,6 @@
 import { NmiCheckout } from "@/components/NmiCheckout";
 
 const offers = {
-  dfy_997: { name: "Premium DFY Store", amount: "997.00" },
   premium_97: { name: "Premium Store Upgrade", amount: "97.00" },
   premium_47: { name: "Premium Store Upgrade — Special Offer", amount: "47.00" },
 } as const;

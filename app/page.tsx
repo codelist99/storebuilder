@@ -1,6 +1,5 @@
-import { Suspense } from "react";
-import { LiveStoreLanding } from "@/components/LiveStoreLanding";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <Suspense fallback={null}><LiveStoreLanding /></Suspense>;
+  redirect("/create-shopify");
 }

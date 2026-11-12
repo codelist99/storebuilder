@@ -5,7 +5,6 @@ import { chargeNmiToken } from "@/lib/nmi";
 import { normalizeShop } from "@/lib/shopify";
 
 const offers = {
-  dfy_997: { name: "Premium DFY Store", amount: "997.00", cents: 99700, plan: null, redirect: "/create-shopify" },
   premium_97: { name: "Premium Store Upgrade", amount: "97.00", cents: 9700, plan: "premium_97", redirect: "/build" },
   premium_47: { name: "Premium Store Upgrade — Special Offer", amount: "47.00", cents: 4700, plan: "premium_47", redirect: "/build" },
 } as const;
