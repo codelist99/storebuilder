@@ -1,2 +1,2 @@
 import { FunnelShell } from "@/components/FunnelShell"; import { BannerChoice } from "@/components/StoreChoices";
-export default function Page(){return <FunnelShell><BannerChoice/></FunnelShell>}
+export default async function Page({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}){const params=await searchParams;const query=new URLSearchParams();for(const[k,v]of Object.entries(params))if(typeof v==="string")query.set(k,v);return <FunnelShell><BannerChoice query={query.toString()}/></FunnelShell>}
