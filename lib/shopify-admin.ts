@@ -1,4 +1,4 @@
-import { decryptSecret } from "@/lib/crypto";
+import { decryptSecret, encryptSecret } from "@/lib/crypto";
 import { db } from "@/lib/db";
 
 const API_VERSION = "2026-10";
@@ -8,17 +8,56 @@ type GraphqlResponse<T> = { data?: T; errors?: Array<{ message: string }> };
 export async function connectedShop(shopDomain: string) {
   const sql = db();
   const rows = await sql`
-    select id, shop_domain, access_token_encrypted, selected_plan
+    select id, shop_domain, access_token_encrypted, refresh_token_encrypted,
+      access_token_expires_at, refresh_token_expires_at, selected_plan
     from shops
     where shop_domain = ${shopDomain} and connection_status = 'connected'
     limit 1
   `;
   const shop = rows[0];
   if (!shop?.access_token_encrypted) throw new Error("Shopify store is not connected");
+  let accessToken = decryptSecret(String(shop.access_token_encrypted));
+  const expiresAt = shop.access_token_expires_at ? new Date(String(shop.access_token_expires_at)).getTime() : 0;
+  if (expiresAt && expiresAt <= Date.now() + 5 * 60 * 1000) {
+    if (!shop.refresh_token_encrypted) throw new Error("Shopify authorization must be renewed");
+    const clientId = process.env.SHOPIFY_API_KEY;
+    const clientSecret = process.env.SHOPIFY_API_SECRET;
+    if (!clientId || !clientSecret) throw new Error("Shopify app is not configured");
+    const response = await fetch(`https://${shop.shop_domain}/admin/oauth/access_token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: "refresh_token",
+        refresh_token: decryptSecret(String(shop.refresh_token_encrypted))
+      }),
+      cache: "no-store"
+    });
+    const refreshed = await response.json() as {
+      access_token?: string;
+      refresh_token?: string;
+      expires_in?: number;
+      refresh_token_expires_in?: number;
+    };
+    if (!response.ok || !refreshed.access_token || !refreshed.refresh_token || !refreshed.expires_in) {
+      throw new Error("Shopify authorization must be renewed");
+    }
+    accessToken = refreshed.access_token;
+    await sql`
+      update shops set
+        access_token_encrypted = ${encryptSecret(refreshed.access_token)},
+        refresh_token_encrypted = ${encryptSecret(refreshed.refresh_token)},
+        access_token_expires_at = now() + (${refreshed.expires_in} * interval '1 second'),
+        refresh_token_expires_at = now() + (${refreshed.refresh_token_expires_in || 0} * interval '1 second'),
+        updated_at = now()
+      where id = ${shop.id}
+    `;
+  }
   return {
     id: String(shop.id),
     domain: String(shop.shop_domain),
-    accessToken: decryptSecret(String(shop.access_token_encrypted)),
+    accessToken,
     plan: String(shop.selected_plan)
   };
 }
