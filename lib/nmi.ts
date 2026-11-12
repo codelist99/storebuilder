@@ -15,6 +15,21 @@ export type NmiCustomer = {
   country?: string;
 };
 
+function nextMonthlyBillingDate() {
+  const now = new Date();
+  const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+  const lastDay = new Date(
+    Date.UTC(next.getUTCFullYear(), next.getUTCMonth() + 1, 0),
+  ).getUTCDate();
+  const billingDay = Math.min(now.getUTCDate(), lastDay);
+  next.setUTCDate(billingDay);
+
+  return {
+    dayOfMonth: billingDay,
+    startDate: `${next.getUTCFullYear()}${String(next.getUTCMonth() + 1).padStart(2, "0")}${String(billingDay).padStart(2, "0")}`,
+  };
+}
+
 export async function chargeNmiToken(input: {
   paymentToken: string;
   amount: string;
@@ -46,11 +61,13 @@ export async function chargeNmiToken(input: {
     country: input.customer.country || "US",
   });
   if (input.recurring) {
+    const schedule = nextMonthlyBillingDate();
     payload.set("recurring", "add_subscription");
     payload.set("plan_payments", "0");
     payload.set("plan_amount", input.recurring.amount);
     payload.set("month_frequency", String(input.recurring.monthFrequency));
-    payload.set("day_of_month", String(new Date().getUTCDate()));
+    payload.set("day_of_month", String(schedule.dayOfMonth));
+    payload.set("start_date", schedule.startDate);
   }
 
   const response = await fetch(endpoint(), {
