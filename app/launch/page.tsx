@@ -1,0 +1,2 @@
+import { FunnelShell } from "@/components/FunnelShell";
+export default function Page(){return <FunnelShell step="Final Step"><div className="success"><h1>🚀 Let&apos;s Launch Your Store Together</h1><p>Your BuildMyStore setup is complete. Check your Shopify admin to review products, supplier settings and storefront details before taking the store live.</p><a className="btn" href="https://admin.shopify.com" target="_blank" rel="noreferrer">Open Shopify Admin</a></div></FunnelShell>}

@@ -59,7 +59,8 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const response = NextResponse.redirect(new URL(`/upgrade?shop=${encodeURIComponent(shop)}`, request.url));
+  const leadQuery = leadId ? `&lead=${encodeURIComponent(leadId)}` : "";
+  const response = NextResponse.redirect(new URL(`/upgrade?shop=${encodeURIComponent(shop)}${leadQuery}`, request.url));
   response.cookies.delete("shopify_oauth_state");
   response.cookies.delete("shopify_lead_id");
   return response;

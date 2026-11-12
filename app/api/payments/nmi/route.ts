@@ -6,6 +6,7 @@ import { normalizeShop } from "@/lib/shopify";
 
 const offers = {
   premium_97: { name: "Premium Store Upgrade", amount: "97.00", cents: 9700, plan: "premium_97", redirect: "/build" },
+  profit_booster_98: { name: "Profit Booster App Suite — Monthly", amount: "98.00", cents: 9800, plan: "profit_booster_98", redirect: "/launch" },
   premium_47: { name: "Premium Store Upgrade — Special Offer", amount: "47.00", cents: 4700, plan: "premium_47", redirect: "/build" },
 } as const;
 
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
         phone: value(body, "phone"), address: value(body, "address"), city: value(body, "city"),
         state: value(body, "state"), zip: value(body, "zip"), country: value(body, "country") || "US",
       },
+      recurring: offerKey === "profit_booster_98" ? { amount: "98.00", monthFrequency: 1 } : undefined,
     });
   } catch (cause) {
     console.error("NMI request failed", cause instanceof Error ? cause.message : cause);

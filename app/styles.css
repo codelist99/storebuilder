@@ -109,3 +109,15 @@ p, li { font-size: 19px; line-height: 1.52; }
 .nmi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }.nmi-card-fields { display: grid; gap: 14px; padding: 16px; border-radius: 8px; background: #f3f6fa; }
 .nmi-error { margin: 0; padding: 12px; border-radius: 6px; background: #fff0f0; color: #a31313; font-weight: 700; }.nmi-secure { margin: 0; text-align: center; color: #667085; font-size: 12px; }
 @media (max-width: 560px) { .checkout-card { padding: 21px; }.nmi-row { grid-template-columns: 1fr; } }
+
+/* Guided store builder flow */
+.compact-title { margin-bottom: 22px; font-size: clamp(29px,4vw,44px); }
+.center { text-align:center; }.red { color:#ef3f3f; }.green { color:#08a950; }.blue { color:#142cc9; }
+.muted-price { color:#c41f1f; }.outline-green { border-color:var(--green)!important; color:var(--green)!important; }
+.next-preview { margin:30px -34px -34px; padding:17px 34px; border-top:1px solid var(--line); background:#fff; }.next-preview h2 { margin:5px 0 0; }
+.choice-list { display:grid; gap:14px; margin-top:28px; }.choice-list a { padding:18px; border:1px solid #e0e5ef; border-radius:9px; box-shadow:0 3px 12px rgba(11,28,77,.07); text-decoration:none; font-weight:800; }
+.color-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:25px 0; }.color-choice { width:58px; height:58px; border:4px solid transparent; border-radius:50%; cursor:pointer; }.color-choice.active { border-color:#fff; box-shadow:0 0 0 4px #173bca; }
+.banner-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }.banner-choice { padding:0; border:4px solid transparent; background:none; cursor:pointer; }.banner-choice.active { border-color:#25d51b; }.banner-choice img { display:block; width:100%; }
+.app-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:22px 0; }.app-grid span { min-height:75px; display:grid; place-items:center; padding:10px; border:1px solid #dce2ed; background:#f7f9fc; text-align:center; font-weight:800; }
+.video-placeholder { min-height:100%; display:grid; place-items:center; padding:25px; text-align:center; }
+@media(max-width:680px){.next-preview{margin:25px -18px -24px;padding:17px 18px}.banner-grid,.app-grid{grid-template-columns:1fr 1fr}}

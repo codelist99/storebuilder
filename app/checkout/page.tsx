@@ -2,6 +2,7 @@ import { NmiCheckout } from "@/components/NmiCheckout";
 
 const offers = {
   premium_97: { name: "Premium Store Upgrade", amount: "97.00" },
+  profit_booster_98: { name: "Profit Booster App Suite — $98/month", amount: "98.00" },
   premium_47: { name: "Premium Store Upgrade — Special Offer", amount: "47.00" },
 } as const;
 

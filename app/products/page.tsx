@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { FunnelShell } from "@/components/FunnelShell";
+export default async function Page({searchParams}:{searchParams:Promise<{shop?:string;lead?:string}>}) {const {shop="",lead=""}=await searchParams;const query=`shop=${encodeURIComponent(shop)}&lead=${encodeURIComponent(lead)}`;return <FunnelShell step="Step 2 · Add Winning Products"><h1 className="compact-title">📦 STEP 2. Add Winning Products</h1><p>You&apos;re ready to add products to your store and connect to a world-class vendor.</p><div className="choice-list"><Link href={`/products/add?${query}`}>🟣 Add Winning Products</Link><Link href={`/supplier?${query}`}>🟣 Connect with your Dropshipping Supplier</Link></div></FunnelShell>}

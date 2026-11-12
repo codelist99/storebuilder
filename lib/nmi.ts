@@ -21,6 +21,7 @@ export async function chargeNmiToken(input: {
   orderId: string;
   description: string;
   customer: NmiCustomer;
+  recurring?: { amount: string; monthFrequency: number };
 }) {
   const securityKey = process.env.NMI_PRIVATE_KEY;
   if (!securityKey) throw new Error("NMI is not configured");
@@ -44,6 +45,13 @@ export async function chargeNmiToken(input: {
     zip: input.customer.zip,
     country: input.customer.country || "US",
   });
+  if (input.recurring) {
+    payload.set("recurring", "add_subscription");
+    payload.set("plan_payments", "0");
+    payload.set("plan_amount", input.recurring.amount);
+    payload.set("month_frequency", String(input.recurring.monthFrequency));
+    payload.set("day_of_month", String(new Date().getUTCDate()));
+  }
 
   const response = await fetch(endpoint(), {
     method: "POST",

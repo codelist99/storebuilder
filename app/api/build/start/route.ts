@@ -13,6 +13,8 @@ const standardPages = [
 export async function POST(request: NextRequest) {
   const form = await request.formData();
   const shopDomain = normalizeShop(String(form.get("shop") || ""));
+  const lead = String(form.get("lead") || "");
+  const leadQuery = /^[0-9a-f-]{36}$/i.test(lead) ? `&lead=${encodeURIComponent(lead)}` : "";
   if (!shopDomain) return NextResponse.redirect(new URL("/connect?error=invalid", request.url), 303);
 
   const sql = db();
@@ -38,11 +40,11 @@ export async function POST(request: NextRequest) {
       where id = ${jobId}
     `;
     await sql`update shops set build_status = 'complete', build_completed_at = now(), updated_at = now() where id = ${shop.id}`;
-    return NextResponse.redirect(new URL(`/build/complete?shop=${encodeURIComponent(shopDomain)}`, request.url), 303);
+    return NextResponse.redirect(new URL(`/build/complete?shop=${encodeURIComponent(shopDomain)}${leadQuery}`, request.url), 303);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Store build failed";
     await sql`update build_jobs set status = 'error', error = ${message}, current_step = 'Build stopped', updated_at = now() where id = ${jobId}`;
     await sql`update shops set build_status = 'error', build_error = ${message}, updated_at = now() where id = ${shop.id}`;
-    return NextResponse.redirect(new URL(`/build?shop=${encodeURIComponent(shopDomain)}&error=build`, request.url), 303);
+    return NextResponse.redirect(new URL(`/build?shop=${encodeURIComponent(shopDomain)}&error=build${leadQuery}`, request.url), 303);
   }
 }

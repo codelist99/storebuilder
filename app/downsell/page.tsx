@@ -1,18 +1,2 @@
-import Link from "next/link";
-import { FunnelShell } from "@/components/FunnelShell";
-import { OfferVideo } from "@/components/OfferVideo";
-
-export default async function DownsellPage({ searchParams }: { searchParams: Promise<{ shop?: string }> }) {
-  const { shop = "" } = await searchParams;
-  const checkoutUrl = `/checkout?offer=premium_47&shop=${encodeURIComponent(shop)}`;
-  return (
-    <FunnelShell>
-      <h1>Wait — get the Premium Store for less</h1>
-      <OfferVideo src={process.env.DOWNSELL_VIDEO_URL} label="Premium Store downsell" />
-      <p>Build the upgraded store without paying the full $97 today.</p>
-      <div className="offer-price">$47</div>
-      <a className="btn" href={checkoutUrl}>Yes — claim the discounted upgrade</a>
-      <Link className="btn secondary" href={`/build?shop=${encodeURIComponent(shop)}`}>No thanks — build my free store</Link>
-    </FunnelShell>
-  );
-}
+import Link from"next/link";import{FunnelShell}from"@/components/FunnelShell";import{OfferVideo}from"@/components/OfferVideo";
+export default async function Page({searchParams}:{searchParams:Promise<{shop?:string;lead?:string}>}){const{shop="",lead=""}=await searchParams;const q=new URLSearchParams({offer:"premium_47",shop,lead});return <FunnelShell><h1 className="compact-title">Wait - I want to help you succeed...</h1><h2 className="center"><mark>I&apos;m going to help you build a premium store</mark><br/><span className="red">without spending $97 today!</span></h2><OfferVideo src={process.env.DOWNSELL_VIDEO_URL} label="Premium Store special offer"/><Link className="btn" href={`/checkout?${q}`}>Yes! Claim 50% OFF the Premium Theme Now</Link><Link className="btn secondary" href={`/build?shop=${encodeURIComponent(shop)}&lead=${encodeURIComponent(lead)}`}>No Thanks - I&apos;d rather start with the basic one</Link></FunnelShell>}
