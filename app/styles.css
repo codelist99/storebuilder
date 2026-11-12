@@ -127,3 +127,26 @@ p, li { font-size: 19px; line-height: 1.52; }
 @media(max-width:850px){.esa-live-strip{height:auto;padding:10px 14px;font-size:12px;text-align:center}.esa-hero{padding:22px 12px 45px}.esa-hero>h1{font-size:30px}.esa-hero>h1 br{display:none}.esa-card{padding:16px}.esa-card>h2{font-size:24px}.esa-grid{grid-template-columns:1fr;gap:24px}.esa-video{width:100%}.esa-important br,.esa-bonus br{display:none}.esa-form-card{padding:0 8px}.esa-clock-labels{gap:20px}}
 
 @media(min-width:851px){.esa-hero>h1{width:min(1000px,100%);font-family:Impact,"Arial Narrow",sans-serif;font-size:36px;font-weight:400;letter-spacing:.1px;line-height:1.08}.esa-card>h2{font-family:Impact,"Arial Narrow",sans-serif;font-size:25px;font-weight:400}}
+
+/* Fill the desktop viewport while preserving the source-page proportions. */
+@media(min-width:1100px){
+  .esa-live-strip{height:54px;font-size:20px}
+  .esa-hero{padding:34px 24px 70px}
+  .esa-hero>h1{width:min(1250px,94vw);margin-bottom:36px;font-size:48px}
+  .esa-card{width:min(1240px,94vw);padding:24px 46px 30px}
+  .esa-card>h2{margin-bottom:32px;font-size:36px}
+  .esa-grid{grid-template-columns:minmax(0,1.55fr) minmax(390px,1fr);gap:62px}
+  .esa-video{width:100%}
+  .esa-important{font-size:20px}
+  .esa-bonus{font-size:25px}
+  .esa-form-card h3{font-size:30px}
+  .esa-form-card>p{font-size:19px}
+  .esa-form-card form{gap:10px}
+  .esa-form-card input{height:48px;font-size:14px}
+  .esa-form-card button{height:68px;font-size:22px}
+  .esa-form-card button small{font-size:10px}
+  .esa-legal{font-size:9px!important}
+  .esa-countdown h4{font-size:19px}
+  .esa-clock b{font-size:38px}
+  .esa-clock-labels{font-size:12px}
+}
