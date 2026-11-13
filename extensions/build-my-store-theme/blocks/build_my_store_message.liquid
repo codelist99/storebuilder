@@ -1,0 +1,45 @@
+<div
+  class="build-my-store-message"
+  style="padding: 16px; color: {{ block.settings.text_color }}; background: {{ block.settings.background_color }}; text-align: {{ block.settings.alignment }}; border-radius: 8px;"
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text | escape }}
+</div>
+
+{% schema %}
+{
+  "name": "BuildMyStore message",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Message",
+      "default": "Your store is ready to grow."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f1f8f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#172b4d"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    }
+  ]
+}
+{% endschema %}
