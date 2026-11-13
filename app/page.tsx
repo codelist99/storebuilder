@@ -1,4 +1,5 @@
 import OptinLanding from "./OptinLanding";
+import { redirect } from "next/navigation";
 
 type SearchValue = string | string[] | undefined;
 
@@ -10,5 +11,15 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
       return normalized ? [[key, normalized]] : [];
     }),
   );
+
+  const isShopifyAppLaunch = ["shop", "host", "embedded", "id_token", "hmac"].some(
+    (key) => typeof attribution[key] === "string",
+  );
+
+  if (isShopifyAppLaunch) {
+    const query = new URLSearchParams(attribution).toString();
+    redirect(`/app${query ? `?${query}` : ""}`);
+  }
+
   return <OptinLanding attribution={attribution} />;
 }
