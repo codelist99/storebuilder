@@ -1,0 +1,108 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  color: #102557;
+  background: linear-gradient(135deg, #5de0df 0%, #5a56a8 68%, #6a0584 100%);
+}
+
+.card {
+  width: min(760px, 100%);
+  padding: clamp(28px, 5vw, 56px);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgb(14 27 75 / 24%);
+}
+
+.brand {
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #087c45;
+  background: #e9fbf2;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.badge::before {
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #11b867;
+  content: "";
+}
+
+.card h1 {
+  margin: 0 0 18px;
+  font-size: clamp(34px, 6vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.intro,
+.store,
+.notice {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.store,
+.notice {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #f3f6fb;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.primary {
+  color: #fff;
+  background: #00b95e;
+}
+
+.primary:hover {
+  background: #009b50;
+}
+
+.secondary {
+  color: #102557;
+  border: 1px solid #cfd7e6;
+  background: #fff;
+}
+
+@media (max-width: 560px) {
+  .actions,
+  .primary,
+  .secondary {
+    width: 100%;
+  }
+}
