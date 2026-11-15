@@ -158,3 +158,16 @@ p, li { font-size: 19px; line-height: 1.52; }
   .esa-clock-labels{font-size:12px}
 }
 .shop-url-field button{background:#00b45a;box-shadow:0 2px 0 #078b49;transition:background .15s ease,transform .15s ease}.shop-url-field button:hover{background:#079b51}.shop-url-field button:active{transform:translateY(1px)}.shop-url-field button.is-saved{background:#078b49}
+.premium-comparison {
+  margin: 24px auto;
+  text-align: center;
+}
+
+.premium-comparison-image {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 0 auto;
+}
+

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { FunnelShell } from "@/components/FunnelShell";
 import { OfferVideo } from "@/components/OfferVideo";
@@ -28,27 +29,14 @@ export default async function Page({
         optimized product pages, an expanded product catalog, and access to the
         weekly live workshop.
       </p>
-      <div className="comparison">
-        <div className="premium">
-          <h2>Premium Store</h2>
-          <ul>
-            <li>Pro theme + optimized conversions</li>
-            <li>2 professional banners</li>
-            <li>250+ premium products</li>
-            <li>Customized product pages</li>
-            <li>Weekly live workshop</li>
-          </ul>
-          <div className="offer-price">$97</div>
-        </div>
-        <div>
-          <h2>Beginner Store</h2>
-          <ul>
-            <li>Free Shopify theme</li>
-            <li>2 banners</li>
-            <li>Starter setup</li>
-          </ul>
-          <div className="offer-price muted-price">$0</div>
-        </div>
+      <div className="premium-comparison">
+        <Image
+          src="/builder/premium-store-comparison.png"
+          alt="Premium Store compared with the basic Beginner Store"
+          width={410}
+          height={318}
+          className="premium-comparison-image"
+        />
       </div>
       <Link className="btn" href={`/checkout?${q}`}>
         Get Access To Your Premium Store Now
